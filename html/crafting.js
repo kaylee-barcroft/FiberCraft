@@ -7,13 +7,28 @@ var knitting = document.getElementById('knitting');
 var crochet = document.getElementById('crochet');
 var other = document.getElementById('other-proj-type');
 var patternName = document.getElementById('name');
-var formMessage = document.getElementById('form-message');
-const patternLink = document.getElementById('pattern-link');
+const materialType = document.getElementById('material-type');
+const materialQty = document.getElementById('material-qty');
+const patternLink = document.getElementById('pattern');
+const formMessage = document.getElementById('form-message');
+
 const patternDetailBtn = document.getElementById('to-pattern-detail');
+//nav buttons
 const patternDetailNav = document.getElementById('nav-pattern-detail');
 const patternUploadNav = document.getElementById('nav-pattern-upload');
 const logo = document.getElementById('logo');
 const dashNav = document.getElementById('nav-dashboard');
+//new AJAX buttons
+const postButton = document.getElementById('pattern-post');
+const putButton = document.getElementById('update-it');
+
+const getEditDataButton = document.getElementById('get-item');
+const deleteButton = document.getElementById('delete-it');
+const grabButton = document.getElementById('get-it');
+const apiList = document.getElementById('api-obj-select');
+
+
+
 
 
 const formValid = function() {
@@ -31,13 +46,11 @@ const formValid = function() {
 
 const successOutput = function() {
 	formMessage.innerText = 'Form submitted!';
-	setTimeout(() => {pForm.submit()}, 1500);
-	
 }
 
 const projectInfo = function() {
 	
-	const existingInput = pForm.querySelector('.additional-input');
+	const existingInput = document.querySelector('.additional-input');
     if (existingInput) {
 		existingInput.remove();
 	}
@@ -78,15 +91,27 @@ const projectInfo = function() {
 
 radioSelect.addEventListener('change', projectInfo);
 	
-pForm.addEventListener('submit', function(e) {
-	e.preventDefault(); // if required elements are not filled out, the form should not submit
-	
-	if(!formValid()) {
-		formMessage.innerText = 'Error: Please fill out all required fields (*)';
-	} //TODO: ask about this validator not working
-	
-	successOutput(); 
-})
+
+function getSelectedProjectType() {
+    if (knitting.checked) {
+        return knitting.value;
+    } else if (crochet.checked) {
+        return crochet.value;
+    } else if (other.checked) {
+        return other.value;
+    }
+    return null;
+}
+
+function collectFormData() {
+    return {
+        projectType: getSelectedProjectType(),
+        name: patternName.value,
+        materialType: materialType.value,
+        materialQty: materialQty.value,
+        pattern: patternLink.value
+    };
+}
 
 patternDetailBtn.onclick = function () {
         window.location.href = "pattern-detail.html";
@@ -103,3 +128,180 @@ patternUploadNav.onclick = function () {
 logo.onclick = function () {
 		window.location.href = "index.html";
 		};
+		
+		
+
+//POST
+const postPattern = async function (pattern) {
+	
+	fetch('/api', {
+		method: 'POST',
+		body: JSON.stringify(pattern)
+	})
+	.then(refreshApiList)
+};	
+		
+//PUT
+// Function to populate form with existing item data
+const populateFormForEdit = async function(uid) {
+    try {
+        // Fetch the specific item data using its UID
+		console.log(`uid: ${uid}`)
+        const response = await fetch(`/api?uid=${uid}`, { method: 'GET' });
+        if (!response.ok) throw new Error('Failed to fetch item details');
+        
+        const itemData = await response.json();
+        
+        // Populate form fields with current values
+        patternName.value = itemData.name;
+        materialType.value = itemData.materialType;
+        materialQty.value = itemData.materialQty;
+        patternLink.value = itemData.pattern;
+        
+        // load project type
+        projectType = getSelectedProjectType();
+        if (itemData.projectType === knitting.value) {
+            knitting.checked = true;
+        } else if (itemData.projectType === crochet.value) {
+            crochet.checked = true;
+        } else if (itemData.projectType === other.value) {
+            other.checked = true;
+        }
+	} catch (error) {
+        console.error('Error loading item for edit:', error);
+    }
+};
+
+const loadItemToEdit = async function() {
+	
+	// get stuff out of the update fields
+	const selectedOption = apiList.options[apiList.selectedIndex];
+
+    
+    if (!selectedOption || selectedOption.disabled) {
+        console.error("No item selected");
+        return;
+    }
+
+    const itemUid = selectedOption.dataset.uid;
+    
+    // save the uid somewhere more permanent and less editable
+    putButton.dataset.editingUid = itemUid;
+    
+    await populateFormForEdit(itemUid);
+};
+
+const editItem = async function(updatedPattern) {
+	//grab that uid we saved
+	const itemUid = putButton.dataset.editingUid;
+
+    if (!itemUid) {
+        console.error("No item UID found for update");
+        return;
+    }
+	
+	try {
+		await fetch(`/api?uid=${itemUid}`, {
+			method: 'PUT',
+			body: JSON.stringify(updatedPattern)
+		})
+		// if we did it, clear that button
+		putButton.dataset.editingUid = '';
+		await refreshApiList()
+	} catch (err) {
+			console.error('Error updating item:', err);
+	}
+	
+}
+
+		
+// DELETE
+const deleteItem = async function() {
+    // Get the currently selected option
+    const selectedOption = apiList.options[apiList.selectedIndex];
+    
+    if (!selectedOption || selectedOption.disabled) {
+        console.error("No item selected");
+        return;
+    }
+    
+    // grab what we need
+    const itemToDelete = selectedOption.dataset.uid;
+    
+    try {
+        await fetch(`/api?uid=${itemToDelete}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+			// no body needed - the uid is in the url
+        });
+        // refresh afterwards
+        await refreshApiList();
+    } catch (error) {
+        console.error('Error deleting item:', error);
+    }
+};
+		
+		
+//GET
+const refreshApiList = async function() {
+  try {
+    const response = await fetch('/api', { method: 'GET' });
+    const dancers = await response.json();
+    
+    if (dancers && Object.keys(dancers).length > 0) {
+      // Clear the list including the default option
+      apiList.innerHTML = ''; 
+      
+      // Add all the patterns
+      Object.entries(dancers).forEach((d) => {
+        const item = document.createElement('option');
+        item.dataset.uid = d[0];
+        item.value = d[1].name; 
+        item.innerText = d[1].name;
+        apiList.appendChild(item); 
+      });
+    } else {
+      // If there are no patterns, reset to just the default option
+      apiList.innerHTML = '';
+      const emptyOption = document.createElement('option');
+      emptyOption.value = '';
+      emptyOption.innerText = 'No patterns found';
+      emptyOption.disabled = true;
+      emptyOption.selected = true;
+      apiList.appendChild(emptyOption);
+    }
+  } catch (error) {
+    console.error('Error refreshing API list:', error);
+  }
+};
+
+grabButton.addEventListener('click', refreshApiList());
+deleteButton.addEventListener('click', deleteItem);
+
+postButton.addEventListener('click', function() {
+	if(!formValid()) {
+		formMessage.innerText = 'Error: Please fill out all required fields (*)';
+		return;
+	}
+	const pattern = collectFormData();
+	postPattern(pattern);
+	successOutput();
+});
+
+putButton.addEventListener('click', function() {
+	if(!formValid()) {
+		formMessage.innerText = 'Error: Please fill out all required fields (*)';
+		return;
+	}
+	const updatedPattern = collectFormData();
+	editItem(updatedPattern);
+	successOutput();
+})
+
+getEditDataButton.addEventListener('click', function() {
+	loadItemToEdit();
+})
+
+refreshApiList();

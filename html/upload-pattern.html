@@ -20,7 +20,7 @@
 	</nav>
 	<section id='formSection'>
 	<h1>Pattern Upload</h1>
-	<form action='/api' class='patternForm' method='POST'>
+	<form action='' class='patternForm' method='POST'>
 	<fieldset>
 	  <legend>*Project Type</legend>
 
@@ -66,12 +66,22 @@
 		<input type="url" name="pattern" id="pattern" />
 	</div>
 		<p class='button'>
-		<button type="submit" id='pattern-save'>Save Pattern to Account</button>
+		<button type="button" id='pattern-post'>Save Pattern to Account</button>
+		<button type="button" id='update-it'>Update This Pattern</button>
 		</p>
 	<p id="form-message"></p>
 	</form>
 	<br />
 	<button type='button' id='to-pattern-detail'>Pattern Detail</button>
+
+	<div id='api-stuff'>
+		<select name='api-obj-select' id='api-obj-select'>
+			<option value="" disabled selected>No patterns found</option>
+		</select>
+		<button type='button' id='get-item'>Load This Thing To Edit</button>
+		<button type='button' id='get-it'>Get The Things</button>
+		<button type='button' id='delete-it'>Delete A Thing</button>
+	</div>
 	</section>
 <script src="crafting.js"></script>
 </body>
