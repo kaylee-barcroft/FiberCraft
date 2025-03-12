@@ -20,22 +20,29 @@
 	<button type='button' id='nav-pattern-upload'>Upload New Pattern</button>
 	<button type='button' id='nav-pattern-filter'>Browse Patterns</button>
 	<button type='button' id='nav-pattern-detail'>Pattern Detail</button>
-	</nav>
-
-	<h1>Dashboard</h1>
-	<section>
-	<h2>What will you create today?</h2>
+</nav>
+	<!-- SORTED PATTERNS STUFF -->
+	<h1>Pattern Browse</h1>
 	
-	<div class='quilt-div' id="recent-projects">
-	<h2>Recent Projects</h2>
-	<ul id='recents'>
-	<!-- recent projects are loaded here in the js -->
-	</ul>
-	</div>
-	
+	<section id='sort-params'>
+		<div class='quilt-div'>
+		<h2>Select Filter Parameters</h2>
+		<label for="filter-pattern-type">Pattern Type: </label>
+			<select name="filter-pattern-type" id="filter-pattern-type">
+				<option value="">All</option>
+				<option value="knitting">Knitting</option>
+				<option value="crochet">Crochet</option>
+				<option value="other">Other</option>
+			</select>
+			
+		<button type="button" id='filter-query'>Show Results</button>
+		</div>
 	</section>
-	
-	<script src='dashboard.js'></script>
-	<script src="navbar.js"></script>
+	<section id='filter-results'>
+
+	</section>
+
+<script src="filter.js"></script>
+<script src="navbar.js"></script>
 </body>
 </html>

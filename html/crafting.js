@@ -3,28 +3,29 @@ const pForm = document.querySelector('.patternForm');
 const radioSelect = document.querySelector("fieldset");
 
 // elements of interest (what kind of project? required fields?)
-var knitting = document.getElementById('knitting');
-var crochet = document.getElementById('crochet');
-var other = document.getElementById('other-proj-type');
-var patternName = document.getElementById('name');
+const knitting = document.getElementById('knitting');
+const crochet = document.getElementById('crochet');
+const other = document.getElementById('other-proj-type');
+const patternName = document.getElementById('name');
 const materialType = document.getElementById('material-type');
 const materialQty = document.getElementById('material-qty');
 const patternLink = document.getElementById('pattern');
 const formMessage = document.getElementById('form-message');
 
-const patternDetailBtn = document.getElementById('to-pattern-detail');
+
 //nav buttons
 const patternDetailNav = document.getElementById('nav-pattern-detail');
 const patternUploadNav = document.getElementById('nav-pattern-upload');
 const logo = document.getElementById('logo');
 const dashNav = document.getElementById('nav-dashboard');
+const patternFilterNav = document.getElementById('nav-pattern-filter');
+
 //new AJAX buttons
 const postButton = document.getElementById('pattern-post');
 const putButton = document.getElementById('update-it');
 
 const getEditDataButton = document.getElementById('get-item');
 const deleteButton = document.getElementById('delete-it');
-const grabButton = document.getElementById('get-it');
 const apiList = document.getElementById('api-obj-select');
 
 
@@ -113,10 +114,6 @@ function collectFormData() {
     };
 }
 
-patternDetailBtn.onclick = function () {
-        window.location.href = "pattern-detail.html";
-        };
-
 patternDetailNav.onclick = function () {
         window.location.href = "pattern-detail.html";
         };
@@ -129,6 +126,13 @@ logo.onclick = function () {
 		window.location.href = "index.html";
 		};
 		
+dashNav.onclick = function () {
+		window.location.href = "index.html";
+		};
+		
+patternFilterNav.onclick = function () {
+		window.location.href= "filter-patterns.html"
+		};
 		
 
 //POST
@@ -277,7 +281,6 @@ const refreshApiList = async function() {
   }
 };
 
-grabButton.addEventListener('click', refreshApiList());
 deleteButton.addEventListener('click', deleteItem);
 
 postButton.addEventListener('click', function() {

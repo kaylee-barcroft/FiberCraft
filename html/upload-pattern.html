@@ -13,14 +13,20 @@
 </head>
 <body>
 <nav>
-	<img class="logo" id="logo" src="logo.jpg" />
+	<img class="logo" id="logo" src="logo.jpg" alt='Ball of yarn' />
 	<button type='button' id='nav-dashboard'>Dashboard</button>
 	<button type='button' id='nav-pattern-upload'>Upload New Pattern</button>
+	<button type='button' id='nav-pattern-filter'>Browse Patterns</button>
 	<button type='button' id='nav-pattern-detail'>Pattern Detail</button>
 	</nav>
 	<section id='formSection'>
 	<h1>Pattern Upload</h1>
-	<form action='' class='patternForm' method='POST'>
+
+	<!--form action='' class='patternForm' method='POST'-->
+	<div class='quilt-div'>
+		<p>Fill out the following fields to upload your pattern. While some fields are optional,
+	consider that every field you skip will make this pattern more difficult to find later
+	 via the filter system.</p>
 	<fieldset>
 	  <legend>*Project Type</legend>
 
@@ -70,17 +76,17 @@
 		<button type="button" id='update-it'>Update This Pattern</button>
 		</p>
 	<p id="form-message"></p>
-	</form>
+	<!--/form-->
+	</div>
 	<br />
-	<button type='button' id='to-pattern-detail'>Pattern Detail</button>
 
 	<div id='api-stuff'>
+	<p>Use the below menu to delete a pattern or load it to the form for editing.</p>
 		<select name='api-obj-select' id='api-obj-select'>
 			<option value="" disabled selected>No patterns found</option>
 		</select>
-		<button type='button' id='get-item'>Load This Thing To Edit</button>
-		<button type='button' id='get-it'>Get The Things</button>
-		<button type='button' id='delete-it'>Delete A Thing</button>
+		<button type='button' id='get-item'>Load Pattern To Edit</button>
+		<button type='button' id='delete-it'>Delete Pattern</button>
 	</div>
 	</section>
 <script src="crafting.js"></script>

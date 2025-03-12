@@ -32,6 +32,10 @@ p, ul {
 	font-family: Calibri, Arial, sans-serif;
 }
 
+#recents {
+	text-align: left;
+}
+
 form {
 	display: inline-block;
 	padding: 1em;
@@ -64,6 +68,18 @@ label {
 	text-align: right;
 }
 
+.quilt-div {
+	display: inline-block;
+	padding: 1em;
+	border: 2px dashed #AAB396;
+	border-radius: 1em;
+	background-color: #F7EED3;
+	color: #674636;
+	font: 1em sans-serif;
+	font-family: Calibri, Arial, sans-serif;
+	min-width: 400px;
+}
+
 .radio-project {
 	min-width: auto;
 	text-align: left;
@@ -82,9 +98,6 @@ fieldset div {
 	margin: 0.5em 0;
 }
 
-.button {
-	padding-left: 200px;
-}
 
 button {
 	padding: 0.5em;
@@ -105,6 +118,11 @@ fieldset {
 	margin: 1em 0;
 	background-color: #FFF8E8;
 }
+
+.button {
+	padding-left: 200px;
+}
+
 
 .detail-header-img {
 	width: 100%;
@@ -128,6 +146,9 @@ fieldset {
 	flex-direction: column;
 }
 
+
+
+/* For screens only */
 @media screen {
 
 	body {
@@ -146,10 +167,18 @@ fieldset {
 	
 }
 
+
+
+
+/* Screen size-dependent & print options */
 @media screen and (orientation: landscape) {
 
 }
 
 @media screen and (orientation: portrait) {
+	
+}
+
+@media print {
 	
 }

@@ -5,7 +5,7 @@
 <meta name="viewport" 
           content="width=device-width,
                    initial-scale=1.0">
-	<title>FiberCraft - Dashboard</title>
+	<title>FiberCraft - Register</title>
 	<!-- custom font -->
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,21 +21,19 @@
 	<button type='button' id='nav-pattern-filter'>Browse Patterns</button>
 	<button type='button' id='nav-pattern-detail'>Pattern Detail</button>
 	</nav>
-
-	<h1>Dashboard</h1>
-	<section>
-	<h2>What will you create today?</h2>
 	
-	<div class='quilt-div' id="recent-projects">
-	<h2>Recent Projects</h2>
-	<ul id='recents'>
-	<!-- recent projects are loaded here in the js -->
-	</ul>
-	</div>
+	<h1>Register New Account</h1>
+	<form action='' method='POST' >
+		<label for="username">*Username: </label>
+		<input type="text" name="username" id="username" required />
+		<label for="password">*Password: </label>
+		<input type="password" name="password" id="password" required />
+		<label for="password2">*Confirm Password: </label>
+		<input type="password" name="password2" id="password2" required />
+		<input type='submit' value="Create Account" />
+		<div id='form-message'></div>
+	</form>
 	
-	</section>
-	
-	<script src='dashboard.js'></script>
-	<script src="navbar.js"></script>
+	<script src="register.js"></script>
 </body>
 </html>
